@@ -1,16 +1,111 @@
+import { FormEvent, useState, useRef } from 'react';
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
+import { Text } from 'src/ui/text';
+import { Separator } from 'src/ui/separator';
+import { RadioGroup } from 'src/ui/radio-group';
+import { Select } from 'src/ui/select';
+import clsx from 'clsx';
 
+import {
+	ArticleStateType,
+	OptionType,
+	backgroundColors,
+	contentWidthArr,
+	defaultArticleState,
+	fontColors,
+	fontFamilyOptions,
+	fontSizeOptions,
+} from 'src/constants/articleProps';
 import styles from './ArticleParamsForm.module.scss';
 
-export const ArticleParamsForm = () => {
+export type ArticleProps = {
+	setArticleState: (value: ArticleStateType) => void;
+};
+
+export const ArticleParamsForm = ({ setArticleState }: ArticleProps) => {
+	const [isOpen, setIsOpen] = useState(false);
+	const reverseRef = useRef<HTMLFormElement>(null);
+	const [asideFormState, setAsideFormState] =
+		useState<ArticleStateType>(defaultArticleState);
+
+	const handleChange = (key: string) => {
+		return (value: OptionType) => {
+			setAsideFormState({
+				...asideFormState,
+				[key]: value,
+			});
+		};
+	};
+
+	const toggleState = () => {
+		setIsOpen((prev) => !prev);
+	};
+
+	const submitParams = (event: FormEvent) => {
+		event.preventDefault();
+		setArticleState(asideFormState);
+		setIsOpen(false);
+	};
+
+	const resetParams = () => {
+		setAsideFormState(defaultArticleState);
+		setArticleState(defaultArticleState);
+		setIsOpen(false);
+	};
 	return (
 		<>
-			<ArrowButton isOpen={false} onClick={() => {}} />
-			<aside className={styles.container}>
-				<form className={styles.form}>
+			<ArrowButton isOpen={isOpen} onClick={toggleState} />
+			<aside
+				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
+				<form className={styles.form} onSubmit={submitParams} ref={reverseRef}>
+					<Text weight={800} size={31}>
+						ЗАДАЙТЕ ПАРАМЕТРЫ
+					</Text>
+
+					<Select
+						title='шрифт'
+						selected={asideFormState.fontFamilyOption}
+						options={fontFamilyOptions}
+						onChange={handleChange('fontFamilyOption')}
+					/>
+					<RadioGroup
+						title='размер шрифта'
+						name='fontSize'
+						selected={asideFormState.fontSizeOption}
+						options={fontSizeOptions}
+						onChange={handleChange('fontSizeOption')}
+					/>
+
+					<Select
+						title='цвет шрифта'
+						selected={asideFormState.fontColor}
+						options={fontColors}
+						onChange={handleChange('fontColor')}
+					/>
+
+					<Separator></Separator>
+					<Select
+						title='цвет фона'
+						selected={asideFormState.backgroundColor}
+						options={backgroundColors}
+						onChange={handleChange('backgroundColor')}
+					/>
+
+					<Select
+						title='ширина контента'
+						selected={asideFormState.contentWidth}
+						options={contentWidthArr}
+						onChange={handleChange('contentWidth')}
+					/>
+
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' htmlType='reset' type='clear' />
+						<Button
+							title='Сбросить'
+							htmlType='reset'
+							type='clear'
+							onClick={resetParams}
+						/>
 						<Button title='Применить' htmlType='submit' type='apply' />
 					</div>
 				</form>
