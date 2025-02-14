@@ -18,7 +18,7 @@ import {
 	fontSizeOptions,
 } from 'src/constants/articleProps';
 import styles from './ArticleParamsForm.module.scss';
-
+//для новой ветки
 export type ArticleProps = {
 	setArticleState: (value: ArticleStateType) => void;
 };
