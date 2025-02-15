@@ -18,7 +18,7 @@ import {
 	fontSizeOptions,
 } from 'src/constants/articleProps';
 import styles from './ArticleParamsForm.module.scss';
-
+//для новой ветки
 export type ArticleProps = {
 	setArticleState: (value: ArticleStateType) => void;
 };
@@ -29,7 +29,7 @@ export const ArticleParamsForm = ({ setArticleState }: ArticleProps) => {
 	const [asideFormState, setAsideFormState] =
 		useState<ArticleStateType>(defaultArticleState);
 
-	const handleChange = (key: keyof ArticleStateType) => {
+	const handleChange = (key: string) => {
 		return (value: OptionType) => {
 			setAsideFormState({
 				...asideFormState,
@@ -90,7 +90,8 @@ export const ArticleParamsForm = ({ setArticleState }: ArticleProps) => {
 						options={fontColors}
 						onChange={handleChange('fontColor')}
 					/>
-					<Separator />
+
+					<Separator></Separator>
 					<Select
 						title='цвет фона'
 						selected={asideFormState.backgroundColor}

@@ -3,11 +3,14 @@ import { Article } from '../article/Article';
 import { ArticleParamsForm } from '../article-params-form';
 import { defaultArticleState } from 'src/constants/articleProps';
 
+import styles from './index.module.scss';
+
 export const App = () => {
 	const [articleState, setArticleState] = useState(defaultArticleState);
 
 	return (
 		<main
+			className={styles.main}
 			style={
 				{
 					'--font-family': articleState.fontFamilyOption.value,
