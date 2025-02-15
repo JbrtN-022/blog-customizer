@@ -6,7 +6,7 @@ import { Separator } from 'src/ui/separator';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Select } from 'src/ui/select';
 import clsx from 'clsx';
-
+import { useCloseArticleOverlay } from '../hooks/CloseOverlay';
 import {
 	ArticleStateType,
 	OptionType,
@@ -53,14 +53,21 @@ export const ArticleParamsForm = ({ setArticleState }: ArticleProps) => {
 		setArticleState(defaultArticleState);
 		setIsOpen(false);
 	};
+
+	useCloseArticleOverlay({
+		isOpen: isOpen,
+		rootRef: reverseRef,
+		onClose: () => setIsOpen(false),
+	});
+
 	return (
 		<>
 			<ArrowButton isOpen={isOpen} onClick={toggleState} />
 			<aside
 				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
 				<form className={styles.form} onSubmit={submitParams} ref={reverseRef}>
-					<Text weight={800} size={31}>
-						ЗАДАЙТЕ ПАРАМЕТРЫ
+					<Text as='h2' weight={800} size={31} uppercase>
+						задайте параметры
 					</Text>
 
 					<Select
